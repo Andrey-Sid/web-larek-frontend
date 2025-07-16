@@ -46,4 +46,28 @@ export class OrderData implements IOrderData {
 			items: this._items
     }
   }
+
+  validate(): Record<string, string> {
+  const errors: Record<string, string> = {};
+
+  if (!this._address || this._address.trim() === '') {
+    errors.address = 'Поле адреса обязательно';
+  }
+
+  if (!this._email || !this._email.includes('@')) {
+    errors.email = 'Некорректный email';
+  }
+
+  if (!this._phone || this._phone.length < 10) {
+    errors.phone = 'Некорректный номер телефона';
+  }
+
+  if (!this._payment) {
+    errors.payment = 'Выберите способ оплаты';
+  }
+
+  return errors;
+  }
+
+  
 }

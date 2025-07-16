@@ -50,7 +50,12 @@ export class FormOrder extends Form<TFormOrder> implements IFormOrder {
     return this.inputAddress.value
   }
 
-  get valid() {
+  showErrors(errors: Record<string, string>) {
+  this.errorMessage = Object.values(errors).join(', ');
+  }
+
+
+  /*get valid() {
     const isPayment = Boolean(this.payment);
     if(!(super.valid) && isPayment) {
       this.errorMessage ='';
@@ -66,9 +71,11 @@ export class FormOrder extends Form<TFormOrder> implements IFormOrder {
     }
     this.errorMessage = 'Выберите способ оплаты';
     return true
-  }
+  }*/
 
-  set valid(value: boolean) {
+  /*set valid(value: boolean) {
     super.valid = value;
-  }
+  }*/
+
+    
 }

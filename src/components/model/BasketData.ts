@@ -15,11 +15,18 @@ export class BasketData extends Model implements IBasketData {
   }
 
   addPurchase(value: IProduct) {
-    if(!this._purchases.find(purchase => {purchase.id === value.id})) {
+    if(!this.checkProduct(value.id)) {
       this._purchases.push(value);
       this.events.emit('purchases:changed', {id: value.id })
     }
   }
+
+  /*addPurchase(value: IProduct) {
+    if(!this._purchases.find(purchase => {purchase.id === value.id})) {
+      this._purchases.push(value);
+      this.events.emit('purchases:changed', {id: value.id })
+    }
+  }*/
 
   deletePurchase(id: string) {
     this._purchases = this._purchases.filter(purchase => purchase.id !== id);
@@ -51,4 +58,6 @@ export class BasketData extends Model implements IBasketData {
     this._purchases = [];
     this.events.emit('purchases:changed', {})
   }
+
+  
 }
