@@ -21,4 +21,30 @@ export class FormContacts extends Form<TFormContacts> implements IFormContacts {
     return this.inputPhone.value
   }
 
+  get valid() {
+    const isInputEmail = Boolean(this.inputEmail.value);
+    const isInputPhone = Boolean(this.inputPhone.value);
+    if(isInputEmail && isInputPhone) {
+      this.errorMessage ='';
+      return false
+    }
+    else if(super.valid) {
+      this.errorMessage ='Заполните поля эл. почты и телефона';
+      return true
+    }
+    else if(!isInputEmail && isInputPhone) {
+      this.errorMessage ='Заполните поле эл. почты';
+      return true
+    }
+    else if(isInputEmail && !isInputPhone) {
+      this.errorMessage ='Заполните поле телефона';
+      return true
+    }
+  }
+
+  set valid(value: boolean) {
+    super.valid = value;
+  }
+
+
 }

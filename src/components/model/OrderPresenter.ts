@@ -3,25 +3,22 @@ import { OrderData } from "./OrderData";
 import { IEvents } from "../base/Events";
 
 export class OrderPresenter {
-  protected view: FormOrder;
-  protected model: OrderData;
+  constructor(
+    protected view: FormOrder,
+    protected model: OrderData,
+    protected events: IEvents
+  ) {
+    // Реакция на ввод пользователя
+    this.events.on("order:input", (data: { field: string; value: string }) => {
+      (this.model as any)[data.field] = data.value;
 
-  constructor(view: FormOrder, model: OrderData, events: IEvents) {
-    this.view = view;
-    this.model = model;
-
-    // Слушаем событие input из формы
-    events.on('order:input', (data: { field: string; value: string }) => {
-      const { field, value } = data;
-
-      // Запись в модель
-      (this.model as any)[field] = value;
-
-      // Валидация модели
       const errors = this.model.validate();
 
-      // Передаём ошибки обратно в форму
-      this.view.showErrors(errors);
+      this.view.setErrors(errors);
+
+      this.events.emit("order:valid", {
+        isValid: Object.keys(errors).length === 0,
+      });
     });
   }
 }

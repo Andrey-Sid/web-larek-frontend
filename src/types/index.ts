@@ -28,8 +28,8 @@ export interface ICustomer {
   email: string;
   phone: string;
   address: string;
-  total?: number;
-  items?: string[];
+  total: number;
+  items: string[];
 }
 
 export interface IOrderData extends ICustomer {

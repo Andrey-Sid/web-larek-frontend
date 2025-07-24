@@ -19,7 +19,6 @@ import { FormOrder } from './components/view/FormOrder';
 import { FormContacts } from './components/view/FormContacts';
 import { Success } from './components/view/Success';
 import { IProduct, TCardCatalog, TId, TSuccessData } from './types';
-import { OrderPresenter } from './components/model/OrderPresenter';
 
 //поиск контейнеров и темплейтов для классов представления
 const containerPage = ensureElement<HTMLElement>('.page');

@@ -20,13 +20,8 @@ export abstract class Form<T> extends View<TForm> implements IForm {
       this.events.emit(`${this.container.name}:submit`)
     })
     this.inputsList.forEach(input => {
-      input.addEventListener('input', () => {
-        const field = input.name;
-        const value = input.value;
-        this.events.emit(`${this.container.name}:input`, { field, value });
-      });
-      /*input.addEventListener('input', () => 
-        this.events.emit(`${this.container.name}:valid`))*/
+      input.addEventListener('input', () => 
+        this.events.emit(`${this.container.name}:valid`))
     });
   }
 
