@@ -37,7 +37,6 @@ export interface IOrderData extends ICustomer {
 }
 
 export interface IOrderDataBuilder {
-  purchasesInfo: TPurchasesInfo;
   deliveryInfo: TDeliveryInfo;
   contactsInfo: TContactsInfo;
   getOrderData(): ICustomer;
@@ -118,6 +117,11 @@ export interface IFormContacts {
 
 export interface ISuccess {
   description: string;
+}
+
+export interface IFieldChangePayload {
+  fieldName: string;
+  value: string;
 }
 
 export type TPurchasesInfo = Pick<ICustomer, 'total' | 'items'>;

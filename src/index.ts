@@ -18,7 +18,7 @@ import { Modal } from './components/view/Modal';
 import { FormOrder } from './components/view/FormOrder';
 import { FormContacts } from './components/view/FormContacts';
 import { Success } from './components/view/Success';
-import { IProduct, TCardCatalog, TId, TSuccessData } from './types';
+import { IProduct, TCardCatalog, TId, TSuccessData, IFieldChangePayload } from './types';
 
 //поиск контейнеров и темплейтов для классов представления
 const containerPage = ensureElement<HTMLElement>('.page');
@@ -115,7 +115,6 @@ events.on('purchases:changed', (data: TId) => {
 
 //Запись данных из корзины. Переход к форме доставки
 events.on('modal-order:open', () => {
-  orderDataBuilder.purchasesInfo = {total: basketData.getTotal(), items: basketData.getIdList()};
   modal.render({content: formOrder.render({valid: formOrder.valid})})
 });
 
@@ -138,13 +137,32 @@ events.on('contacts:valid', () => {
 
 //Отправка заказа на сервер, получение данных от сервера, очистка корзины и формы
 events.on('contacts:submit', () => {
-  const order = orderDataBuilder.getOrderData().customerInfo;
+  const order = {
+    ...orderDataBuilder.getOrderData().customerInfo,
+    total: basketData.getTotal(),
+    items: basketData.getIdList()
+  };
+
   api.postOrder(order).then((data: TSuccessData) => {
     successData.orderSuccess = data;
     formOrder.clear();
     formContacts.clear();
     basketData.clear();
-  }).catch(console.error)
+  }).catch(console.error);
+});
+
+events.on('order:fieldChange', ({ fieldName, value }: IFieldChangePayload) => {
+  orderDataBuilder.updateField(fieldName, value);
+
+  const { valid, errors } = orderDataBuilder.validateDelivery();
+
+  // одно место, которое управляет UI
+  formOrder.valid = valid;
+  formOrder.setErrors(errors);
+
+  // если тебе нужно уведомить кого-то ещё:
+  events.emit('order:validationErrors', errors);
+  events.emit('order:valid', { valid });  // ОБЯЗАТЕЛЬНО объект, не boolean!
 });
 
 //Получение данных с сервера, запись в соответсвующий объект класса слоя данных
